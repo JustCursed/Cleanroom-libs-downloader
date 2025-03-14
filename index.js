@@ -6,8 +6,10 @@ const downloadFile = async (url, file) => {
 		const resp = await fetch(url);
 
 		if (resp.ok && resp.body) {
-			console.log(`./libs/${file.split('/').slice(0, -1).join('/')}`);
-			await fs.promises.mkdir(`./libs/${file.split('/').slice(0, -1).join('/')}`, { recursive: true });
+			const filePath = `./libs/${file.split('/').slice(0, -1).join('/')}`;
+			await fs.promises.mkdir(filePath, { recursive: true });
+			console.log(`downloading ${filePath}`);
+
 			let writer = fs.createWriteStream(`./libs/${file}`);
 			Readable.fromWeb(resp.body).pipe(writer);
 		}
@@ -30,4 +32,3 @@ const downloadFromJson = async name => {
 	await downloadFromJson('./patches/net.minecraft.json');
 	await downloadFromJson('./patches/org.lwjgl3.json');
 })();
-
